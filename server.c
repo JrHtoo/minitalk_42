@@ -6,7 +6,7 @@
 /*   By: juhtoo-h <juhtoo-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:10:41 by juhtoo-h          #+#    #+#             */
-/*   Updated: 2024/10/30 11:44:51 by juhtoo-h         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:50:01 by juhtoo-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	ft_signal_handler(int sig)
 		write(1, &val, 1);
 		val = 0;
 	}
-	kill(id, SIGUSR1);
 }
 
 int	main(void)
@@ -39,11 +38,9 @@ int	main(void)
 	write(1, "PID = ", 6);
 	ft_putnbr(getpid());
 	write(1, "\n", 1);
+	signal(SIGUSR1, ft_signal_handler);
+	signal(SIGUSR2, ft_signal_handler);
 	while (1)
-	{
-		signal(SIGUSR1, ft_signal_handler);
-		signal(SIGUSR2, ft_signal_handler);
 		pause();
-	}
 	return (0);
 }

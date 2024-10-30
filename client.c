@@ -6,7 +6,7 @@
 /*   By: juhtoo-h <juhtoo-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:10:44 by juhtoo-h          #+#    #+#             */
-/*   Updated: 2024/10/30 11:46:32 by juhtoo-h         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:12:05 by juhtoo-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,45 +17,32 @@ void	ft_send_signal(int pid, char *str)
 {
 	static int	bit;
 
-	if (*str)
+	while (*str)
 	{
-		if (((*str >> bit) % 2) == 0)
-			kill(pid, SIGUSR1);
-		if (((*str >> bit) % 2) == 1)
-			kill(pid, SIGUSR2);
+		if ((((unsigned char)*str >> bit) % 2) == 0)
+			if(kill(pid, SIGUSR1) == -1)
+				ft_error_handler(0);
+
+		if ((((unsigned char)*str >> bit) % 2) == 1)
+			if(kill(pid, SIGUSR2) == -1)
+				ft_error_handler(0);
+		usleep(200));
 		bit++;
 		if (bit == 8)
 		{
-			printf("%s\n", str);
 			str++;
-			bit = 1;
-			usleep(50);
+			bit = 0;
 		}
 	}
 }
-
-void	ft_receipt(int sig)
-{
-	if (sig == SIGUSR1)
-		return ;
-	if (sig == SIGUSR2)
-		exit(EXIT_SUCCESS);
-}
-
 
 int	main(int ac, char **av)
 {
 	if (ac != 3)
 	{
-		write(1, "Utilisez le format: ./client <PID> <String>\n", 44);
+		write(1, "Use the format: ./client <PID> <String>\n", 44);
 		exit(EXIT_FAILURE);
 	}
-	while (1)
-	{
-		ft_send_signal(ft_atoi(av[1]), av[2]);
-		signal(SIGUSR1, ft_receipt);
-		signal(SIGUSR2, ft_receipt);
-		pause();
-	}
+	ft_send_signal(ft_atoi(av[1]), av[2]);
 	return (0);
 }
