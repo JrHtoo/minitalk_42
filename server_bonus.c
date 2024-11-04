@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhtoo-h <juhtoo-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 11:10:41 by juhtoo-h          #+#    #+#             */
-/*   Updated: 2024/11/01 15:22:45 by juhtoo-h         ###   ########.fr       */
+/*   Created: 2024/11/01 14:46:05 by juhtoo-h          #+#    #+#             */
+/*   Updated: 2024/11/01 15:43:58 by juhtoo-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_signal_handler(int sig, siginfo_t *info, void *context)
 {
-	static char	letter;
-	static int	bit;
+	static unsigned char	letter = 0;
+	static int				bit;
 
 	(void)context;
 	if (bit == 0)

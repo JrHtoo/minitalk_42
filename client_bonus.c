@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhtoo-h <juhtoo-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 11:10:44 by juhtoo-h          #+#    #+#             */
-/*   Updated: 2024/11/04 15:04:42 by juhtoo-h         ###   ########.fr       */
+/*   Created: 2024/11/01 14:46:52 by juhtoo-h          #+#    #+#             */
+/*   Updated: 2024/11/01 15:39:41 by juhtoo-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ void	ft_send_terminator(int pid)
 void	ft_send_signal(int pid, char *str)
 {
 	static int	bit;
-	static char	*str_bit;
+	static char	*str_bit = 0;
 
 	if (str)
 		str_bit = str;
 	if (*str_bit)
 	{
-		if ((((char)*str_bit >> bit) % 2) == 0)
+		if ((((unsigned char)*str_bit >> bit) % 2) == 0)
 			if (kill(pid, SIGUSR1) == -1)
 				ft_error_handler(0);
-		if ((((char)*str_bit >> bit) % 2) == 1)
+		if ((((unsigned char)*str_bit >> bit) % 2) == 1)
 			if (kill(pid, SIGUSR2) == -1)
 				ft_error_handler(0);
 		bit++;
@@ -54,7 +54,10 @@ void	ft_reception(int sig, siginfo_t *info, void *context)
 	if (sig == SIGUSR1)
 		ft_send_signal(info->si_pid, NULL);
 	else if (sig == SIGUSR2)
+	{
+		write(1, "Message received\n", 17);
 		exit(EXIT_SUCCESS);
+	}
 }
 
 int	main(int ac, char **av)
@@ -71,7 +74,6 @@ int	main(int ac, char **av)
 		write(1, "Use the format: ./client <PID> <String>\n", 44);
 		exit(EXIT_FAILURE);
 	}
-	ft_check_pid(av[1]);
 	ft_send_signal(ft_atoi(av[1]), av[2]);
 	while (1)
 		pause();

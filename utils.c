@@ -6,11 +6,25 @@
 /*   By: juhtoo-h <juhtoo-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:04:53 by juhtoo-h          #+#    #+#             */
-/*   Updated: 2024/10/29 14:53:48 by juhtoo-h         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:36:43 by juhtoo-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+void	ft_error_handler(int i)
+{
+	if (i == 0)
+	{
+		write(1, "Error KILL\n", 12);
+		exit(1);
+	}
+	else if (i == 1)
+	{
+		write(1, "Error SIGACTION\n", 17);
+		exit(1);
+	}
+}
 
 int	ft_atoi(const char *nptr)
 {
@@ -37,6 +51,19 @@ int	ft_atoi(const char *nptr)
 	return (sign * res);
 }
 
+void	ft_check_pid(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!(str[i] >= '0' && str[i] <= '9'))
+			ft_error_handler(0);
+		i++;
+	}
+}
+
 void	ft_putchar(char c)
 {
 	write(1, &c, 1);
@@ -50,18 +77,4 @@ void	ft_putnbr(int n)
 	if (nb >= 10)
 		ft_putnbr(nb / 10);
 	ft_putchar(nb % 10 + 48);
-}
-
-void	ft_error_handler(int i)
-{
-	if (i == 0)
-	{
-		write(1, "Error KILL\n", 12);
-		exit(1);
-	}
-	else if (i == 1)
-	{
-		write(1, "Error SIGACTION\n", 17);
-		exit(1);
-	}
 }
